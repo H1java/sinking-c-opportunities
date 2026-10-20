@@ -4,6 +4,7 @@ on:
     paths:
       - 'build_report.py'
       - 'data.py'
+      - '.github/workflows/**'
   workflow_dispatch:
 jobs:
   build:
