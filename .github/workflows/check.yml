@@ -1,0 +1,27 @@
+name: build-check
+on:
+  push:
+    paths:
+      - 'check_data.py'
+      - 'check_build.py'
+      - '.github/workflows/check.yml'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install openpyxl
+      - run: python check_build.py
+      - name: Commit generated check report
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add artifacts/
+          git commit -m 'generated 下沉C端前3方向同行核查表' || echo 'no changes'
+          git push
